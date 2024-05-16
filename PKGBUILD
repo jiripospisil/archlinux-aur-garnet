@@ -1,24 +1,25 @@
 # Maintainer: Jiri Pospisil <jiri@jpospisil.com>
 
 pkgname=garnet
-pkgver=1.0.2
+pkgver=1.0.8
 pkgrel=1
 pkgdesc='A high-performance cache-store from Microsoft Research'
 arch=('x86_64')
 url='https://microsoft.github.io/garnet'
 license=('MIT')
 _dotnet_ver=8.0
-makedepends=("dotnet-sdk-$_dotnet_ver")
 depends=("dotnet-runtime-$_dotnet_ver")
+makedepends=("dotnet-sdk-$_dotnet_ver")
+options=('!strip' '!debug')
 backup=('etc/garnet/garnet-server.conf')
 source=(
   "https://github.com/microsoft/garnet/archive/refs/tags/v$pkgver.tar.gz"
   'garnet-server.service'
   'garnet-server.conf'
 )
-b2sums=('5f1cda0a8841be8ed9ec2eb4c67bcfa213f6b20a35f62cea4452fcc1ca32e569809bb0b0a766ab20eea0d4790329522ceb896e5c931c12c509d8dfb78fe1b3db'
-        'b6c13c56736a6114d29f8e929dba82dbcc951e329f225171a5718aa5eb93488d56295d29eb6bf1a72090ff8122305b48745287a594f4e5eac940ecbbc6da16f2'
-        '6917ef89ca33ba4f3b3019c63ca222bc78afafb67ac68e856391aeab6170cc89d384109d3951677cb9eb970a5012e8d22c753fcb676e527b5bb8f852d4fbbbb5')
+b2sums=('c9205d227dd922d5ead886d9d38c9b0c18defd84abebda695b5084516f7d79a6a37afab2d497f60e950675f2536a4cf47579377d462a84dbcd79c457a5f02dc8'
+        '3db262540ecd4c4474e5fd506ec807b80e73105415e0714cf1a33bfd4221e6722ce22c099eb83dffea8c5baf1162768804b6ba374fd6693958af9d36f51e1ebe'
+        'bbb46465676585b37587ccdfbb3831367babc97cfe6ab099fc0e60878a77291ad19dd557d0851ef66b4fd987b1abcefeb3c8c2fd2d433f9458e0e76ab83b40f7')
 
 build() {
   cd "$srcdir/garnet-$pkgver/main/GarnetServer"
@@ -27,18 +28,21 @@ build() {
   export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
   export DOTNET_NOLOGO=1
 
-  dotnet publish -c Release -o build -r linux-x64 --sc false -f "net$_dotnet_ver"
+  dotnet publish GarnetServer.csproj -o build -p:PublishProfile=linux-x64-based "-f:net$_dotnet_ver"
 }
 
 package() {
   install -Dm644 -t "$pkgdir/usr/lib/systemd/system" garnet-server.service
   install -Dm644 -t "$pkgdir/etc/garnet" garnet-server.conf
 
-  cd "$srcdir/garnet-$pkgver/main/GarnetServer"
+  cd "$srcdir/garnet-$pkgver/main/GarnetServer/build"
 
-  mkdir -p "$pkgdir/usr/"{lib,bin}
-  cp -r build "$pkgdir/usr/lib/garnet"
+  mkdir "$pkgdir/usr/lib/garnet"
+  install -Dm755 -t "$pkgdir/usr/lib/garnet" GarnetServer
+  install -Dm644 -t "$pkgdir/usr/lib/garnet" GarnetServer.pdb \
+    runtimes/linux-x64/native/libnative_device.so \
+    CustomRespCommandsInfo.json
 
+  mkdir "$pkgdir/usr/bin"
   ln -sr "$pkgdir/usr/lib/garnet/GarnetServer" "$pkgdir/usr/bin/GarnetServer"
-  chmod 755 "$pkgdir/usr/lib/garnet/GarnetServer"
 }
