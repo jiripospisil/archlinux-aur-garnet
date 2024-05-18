@@ -1,7 +1,7 @@
 # Maintainer: Jiri Pospisil <jiri@jpospisil.com>
 
 pkgname=garnet
-pkgver=1.0.8
+pkgver=1.0.10
 pkgrel=1
 pkgdesc='A high-performance cache-store from Microsoft Research'
 arch=('x86_64')
@@ -17,9 +17,9 @@ source=(
   'garnet-server.service'
   'garnet-server.conf'
 )
-b2sums=('c9205d227dd922d5ead886d9d38c9b0c18defd84abebda695b5084516f7d79a6a37afab2d497f60e950675f2536a4cf47579377d462a84dbcd79c457a5f02dc8'
+b2sums=('0a2fba1e81c224c2c03b60b5cf47c41ce15549cdb1eb228ba313037654c062b9585dc235f51dd82cc8cd20e66982c3bbee84075ec03cacb4523786f3b697be7b'
         '3db262540ecd4c4474e5fd506ec807b80e73105415e0714cf1a33bfd4221e6722ce22c099eb83dffea8c5baf1162768804b6ba374fd6693958af9d36f51e1ebe'
-        'bbb46465676585b37587ccdfbb3831367babc97cfe6ab099fc0e60878a77291ad19dd557d0851ef66b4fd987b1abcefeb3c8c2fd2d433f9458e0e76ab83b40f7')
+        '58198bd631ba26b4df777e8b748853a27cc930a848ea355c8062b8b316a7de0fb9d2eb2166be3bcb2ff69042e51c1c0ae09f12a9b47423bdc4454ea8ff870637')
 
 build() {
   cd "$srcdir/garnet-$pkgver/main/GarnetServer"
@@ -39,9 +39,7 @@ package() {
 
   mkdir "$pkgdir/usr/lib/garnet"
   install -Dm755 -t "$pkgdir/usr/lib/garnet" GarnetServer
-  install -Dm644 -t "$pkgdir/usr/lib/garnet" GarnetServer.pdb \
-    runtimes/linux-x64/native/libnative_device.so \
-    CustomRespCommandsInfo.json
+  install -Dm644 -t "$pkgdir/usr/lib/garnet" GarnetServer.pdb runtimes/linux-x64/native/libnative_device.so
 
   mkdir "$pkgdir/usr/bin"
   ln -sr "$pkgdir/usr/lib/garnet/GarnetServer" "$pkgdir/usr/bin/GarnetServer"
