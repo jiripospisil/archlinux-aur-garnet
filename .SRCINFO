@@ -1,6 +1,6 @@
 pkgbase = garnet
 	pkgdesc = A high-performance cache-store from Microsoft Research
-	pkgver = 1.0.11
+	pkgver = 1.0.12
 	pkgrel = 1
 	url = https://microsoft.github.io/garnet
 	arch = x86_64
@@ -10,10 +10,10 @@ pkgbase = garnet
 	options = !strip
 	options = !debug
 	backup = etc/garnet/garnet-server.conf
-	source = https://github.com/microsoft/garnet/archive/refs/tags/v1.0.11.tar.gz
+	source = https://github.com/microsoft/garnet/archive/refs/tags/v1.0.12.tar.gz
 	source = garnet-server.service
 	source = garnet-server.conf
-	b2sums = 7a94d50e5bd1b38eb01cc5ec05b866ab66e1d20f4da67cd4067880b2d881d38dc652c1101c6ff91e37efe5e585642f41c4b0096f8de30b1eacaa77a43aba737f
+	b2sums = da9e9449f8f8f1c77d99289bd1814c882a9ee367504e5a7618ca90cc93b2d38187f4f5ce6f13cbd9afc9bab6e13819fab8a082340da8eb5fbbbffdcfca7a0850
 	b2sums = 3db262540ecd4c4474e5fd506ec807b80e73105415e0714cf1a33bfd4221e6722ce22c099eb83dffea8c5baf1162768804b6ba374fd6693958af9d36f51e1ebe
 	b2sums = 58198bd631ba26b4df777e8b748853a27cc930a848ea355c8062b8b316a7de0fb9d2eb2166be3bcb2ff69042e51c1c0ae09f12a9b47423bdc4454ea8ff870637
 
